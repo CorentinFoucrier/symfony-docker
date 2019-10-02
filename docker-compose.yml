@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  symfony-docker:
+    container_name: symfony-docker
+    restart: unless-stopped
+    build: ./docker
+    image: synfony-dev
+    volumes:
+      - ./www:/var/www
+    env_file:
+      - .env
+    environment:
+      VIRTUAL_HOST: symfony.localhost
+
+  symfony-docker.mysql:
+    container_name: ${CONTAINER_MYSQL}
+    restart: unless-stopped
+    image: mariadb
+    env_file:
+      - .env
+
+networks:
+  default:
+    external:
+      name: webproxy

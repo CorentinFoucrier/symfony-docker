@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<section class="row">
+    <article class="col-12 col-md-10 offset-md-1 mt-4">
+        <h2 class="text-center">{{ article.title }}</h2>
+        <p class="m-0 small text-muted float-right">Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }}</p>
+        <div>
+            <img src="{{ article.image }}" class="img-fluid" alt="Responsive image">
+        </div>
+        <hr>
+        <p class="text-justify">{{ article.content }}</p>
+        <a class="float-right" href="{{ path('blog_edit', {'id': article.id}) }}"><button class="btn btn-info">Edit</button></a>
+    </article>
+</section>
+{% endblock %}
