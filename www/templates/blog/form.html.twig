@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h2>{{ title }}</h2>
+    {{ form_start(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.content, {
+            'label': 'Contenu',
+            'attr': {'class': 'form-control', 'rows': '4'}
+        }) }}
+        {{ form_row(form.image) }}
+
+        {% if app.request.get('_route') == 'blog_edit' %}
+            <button type="submit" class="btn btn-success">Editer</button>
+        {% else %}
+            <button type="submit" class="btn btn-success">Sauvegarder</button>
+        {% endif %}
+    {{ form_end(form) }}
+
+
+    
+    
+
+{% endblock %}
