@@ -12,17 +12,44 @@
             </div>
         {% endfor %}
     {% endfor %}
-    <article class="col-12 col-md-10 offset-md-1 mt-4 mb-5">
+    <article class="col-12 col-md-10 offset-md-1 mt-4">
         <h2 class="text-center">{{ article.title }}</h2>
-        <p class="m-0 small text-muted float-right">Catégorie: {{ article.category.name }}</p>
-        <p class="m-0 small text-muted float-right">Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }}</p>
+        <p class="m-0 small text-muted float-right">catégorie: {{ article.category.name }}</p>
+        <p class="m-0 small text-muted float-right">Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }} dans la&nbsp;</p>
         <div>
             <img src="{{ article.image }}" class="img-fluid" alt="Responsive image">
         </div>
-        <hr>
+        <hr class="col-6 offset-3">
         <p class="text-justify">{{ article.content }}</p>
         <a class="btn btn-info" href="{{ path('blog_edit', {'id': article.id}) }}">Edit</a>
         <a class="btn btn-danger" href="{{ path('blog_delete', {'id': article.id}) }}">Supprimer</a>
     </article>
+</section>
+<hr class="col-6 offset-3">
+<section>
+    {% for comment in article.comments %}
+        <div class="card p-0 col-8 offset-2 mb-4">
+            <div class="card-header">
+                <strong>Par</strong> {{comment.author}}
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p class="h6">{{comment.content}}</p>
+                    <footer class="blockquote-footer">Creé le
+                        <cite title="Source Title">{{comment.createdAt | date('d/m/Y') }} à {{ comment.createdAt | date('H:i') }}</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+
+    {% endfor %}
+</section>
+<hr class="col-6 offset-3">
+<section class="row">
+    {{ form_start(formComment, {'attr': {'class': 'col-6 offset-3'}})}}
+        {{form_row(formComment.author, { 'label' : 'Auteur', 'attr' : {'class' : 'col-4'} })}}
+        {{form_row(formComment.content, { 'label' : 'Commentaire' })}}
+        <button class="btn btn-success" type="submit">Poster</button>
+    {{ form_end(formComment)}} 
 </section>
 {% endblock %}
