@@ -58,6 +58,7 @@ class BlogController extends AbstractController
             }
             $manager->persist($article);
             $manager->flush();
+            $this->addFlash('success', 'L\'article a bien été créé');
             return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
         }
 
@@ -65,5 +66,16 @@ class BlogController extends AbstractController
             'form' => $form->createView(),
             'title' => $title,
         ]);
+    }
+
+    /**
+     * @Route("/blog/delete/{id}", name="blog_delete")
+     */
+    public function delete(Article $article, ObjectManager $manager)
+    {
+        $manager->remove($article);
+        $manager->flush();
+        $this->addFlash('info', 'L\'article a bien été supprimé');
+        return $this->redirectToRoute('blog');
     }
 }

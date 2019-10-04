@@ -11,7 +11,9 @@
             'attr': {'class': 'form-control', 'rows': '4'}
         }) }}
         {{ form_row(form.image) }}
-
+        <div class="form-group">
+            {{form_row(form.category, { 'label' : 'Catégorie', 'attr' : {'class' : 'form-control'} })}}
+        </div>
         {% if app.request.get('_route') == 'blog_edit' %}
             <button type="submit" class="btn btn-success">Editer</button>
         {% else %}

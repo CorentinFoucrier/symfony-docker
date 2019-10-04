@@ -2,15 +2,27 @@
 
 {% block body %}
 <section class="row">
-    <article class="col-12 col-md-10 offset-md-1 mt-4">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show mx-auto col-10 offset-1" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <article class="col-12 col-md-10 offset-md-1 mt-4 mb-5">
         <h2 class="text-center">{{ article.title }}</h2>
+        <p class="m-0 small text-muted float-right">Catégorie: {{ article.category.name }}</p>
         <p class="m-0 small text-muted float-right">Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }}</p>
         <div>
             <img src="{{ article.image }}" class="img-fluid" alt="Responsive image">
         </div>
         <hr>
         <p class="text-justify">{{ article.content }}</p>
-        <a class="float-right" href="{{ path('blog_edit', {'id': article.id}) }}"><button class="btn btn-info">Edit</button></a>
+        <a class="btn btn-info" href="{{ path('blog_edit', {'id': article.id}) }}">Edit</a>
+        <a class="btn btn-danger" href="{{ path('blog_delete', {'id': article.id}) }}">Supprimer</a>
     </article>
 </section>
 {% endblock %}
