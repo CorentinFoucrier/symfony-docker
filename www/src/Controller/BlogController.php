@@ -6,27 +6,30 @@ use App\Entity\Article;
 use App\Entity\Comment;
 use App\Form\ArticleType;
 use App\Form\CommentType;
-use App\Repository\ArticleRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class BlogController extends AbstractController
 {
     /**
      * @Route("/blog", name="blog")
      */
-    public function index(ArticleRepository $articleRepo)
+    public function index(CacheInterface $cache)
     {
-        //$articleRepo = $this->getDoctrine()->getRepository(Article::class);
 
-        $articles = $articleRepo->findAll();
+        $articles = $cache->getCache('article', function(ItemInterface $item) {
+            $item->expireAfter(10);
+            $articleRepo = $this->getDoctrine()->getRepository(Article::class);
+            return $articleRepo->findAll();
+        });
 
-        return $this->render('blog/index.html.twig', ['articles' => $articles]);
+        return $this->render('blog/index.html.twig', [
+            'articles' => $articles
+        ]);
     }
 
     /**
