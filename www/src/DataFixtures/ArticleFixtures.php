@@ -29,6 +29,7 @@ class ArticleFixtures extends Fixture
                 ->setImage('https://picsum.photos/960/540?random='.$j)
                 ->setCreatedAt($faker->DateTimeBetween('-6 month'))
                 ->setCategory($category)
+                ->setPrice($faker->randomFloat(2, 15, 300))
             ;
             $manager->persist($article);
             for ($k=0; $k < rand(4,6); $k++) { 

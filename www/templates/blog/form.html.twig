@@ -11,8 +11,20 @@
             'attr': {'class': 'form-control', 'rows': '4'}
         }) }}
         {{ form_row(form.image) }}
+        {{form_row(form.category, {
+            'label' : 'Catégorie',
+            'attr' : {'class' : 'form-control'}
+        }) }}
         <div class="form-group">
-            {{form_row(form.category, { 'label' : 'Catégorie', 'attr' : {'class' : 'form-control'} })}}
+                {{ form_label(form.price) }}
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">€</div>
+                </div>
+                
+                {{ form_errors(form.price) }}
+                {{ form_widget(form.price) }}
+            </div>
         </div>
         {% if app.request.get('_route') == 'blog_edit' %}
             <button type="submit" class="btn btn-success">Editer</button>
@@ -20,9 +32,4 @@
             <button type="submit" class="btn btn-success">Sauvegarder</button>
         {% endif %}
     {{ form_end(form) }}
-
-
-    
-    
-
 {% endblock %}

@@ -17,6 +17,7 @@
     {% for article in articles %}
         <article class="col-12 col-md-6 mt-4">
             <h2 class="text-center">{{ article.title }}</h2>
+            <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-link btn-sm">Edit <i class="far fa-edit"></i></a>
             <p class="m-0 small text-muted float-right">Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }}</p>
             <div>
                 <a href="{{ path('blog_show', {'id': article.id}) }}">
@@ -24,8 +25,15 @@
                 </a>
             </div>
             <p class="text-justify">{{ article.content|truncate(180) }}</p>
-            <a href="{{ path('blog_show', {'id': article.id}) }}"><button class="btn btn-success">En savoir plus</button></a>
-            <a href="{{ path('blog_edit', {'id': article.id}) }}"><button class="btn btn-info">Edit</button></a>
+            <div class="row mb-1">
+                <div class="col-4">
+                    <a href="{{ path('blog_show', {'id': article.id}) }}" class="btn btn-success">En savoir plus</a>
+                </div>
+                <div class="col-5 offset-3">
+                    <a href="{{ path('cart_add', {'id': article.id}) }}" class="btn btn-primary btn-block">Acheter pour {{ article.price }}€</a>
+                </div>
+            </div>
+            
         </article>
     {% endfor %}
 </section>

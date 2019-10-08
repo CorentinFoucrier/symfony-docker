@@ -20,13 +20,15 @@ class BlogController extends AbstractController
      */
     public function index(CacheInterface $cache)
     {
-
-        $articles = $cache->getCache('article', function(ItemInterface $item) {
-            $item->expireAfter(10);
+        /*
+        $articles = $cache->get('article', function(ItemInterface $item) {
+            $item->expiresAfter(10);
             $articleRepo = $this->getDoctrine()->getRepository(Article::class);
             return $articleRepo->findAll();
         });
-
+        */
+        $articleRepo = $this->getDoctrine()->getRepository(Article::class);
+        $articles = $articleRepo->findAll();
         return $this->render('blog/index.html.twig', [
             'articles' => $articles
         ]);
