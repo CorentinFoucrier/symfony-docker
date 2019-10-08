@@ -43,6 +43,11 @@ class CartService
         $this->session->set("panier", $panier);
     }
 
+    public function deleteAll()
+    {
+        $this->session->set("panier", []);
+    }
+
     public function getAll()
     {
         $panier = $this->session->get('panier', []);

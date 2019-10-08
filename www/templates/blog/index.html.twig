@@ -17,7 +17,7 @@
     {% for article in articles %}
         <article class="col-12 col-md-6 mt-4">
             <h2 class="text-center">{{ article.title }}</h2>
-            <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-link btn-sm">Edit <i class="far fa-edit"></i></a>
+            <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-link btn-sm text-warning"><i class="far fa-edit"></i> Modifier</a>
             <p class="m-0 small text-muted float-right">Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }}</p>
             <div>
                 <a href="{{ path('blog_show', {'id': article.id}) }}">

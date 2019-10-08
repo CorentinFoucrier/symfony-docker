@@ -6,12 +6,12 @@ use App\Entity\Article;
 use App\Entity\Comment;
 use App\Form\ArticleType;
 use App\Form\CommentType;
+use App\Form\ContactFormType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 
 class BlogController extends AbstractController
 {
@@ -101,5 +101,35 @@ class BlogController extends AbstractController
         $manager->flush();
         $this->addFlash('info', 'L\'article a bien été supprimé');
         return $this->redirectToRoute('blog');
+    }
+
+    /**
+     * @Route("/blog/contact", name="blog_contact")
+     */
+    public function contact(Request $request, \Swift_Mailer $mailer)
+    {
+        $form = $this->createForm(ContactFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $message = (new \Swift_Message('Test Email'))
+                ->setFrom('test@example.com')
+                ->setTo('test@example.com')
+                ->setBody(
+                    $this->renderView(
+                        'emails/test.html.twig', [
+                            'email' => $data['email'],
+                            'content' => $data['content']
+                        ]
+                    ),
+                    'text/html'
+                )
+            ;
+            $mailer->send($message);
+        }
+        return $this->render('blog/contact.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }
