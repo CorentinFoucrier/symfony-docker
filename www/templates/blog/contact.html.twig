@@ -3,9 +3,11 @@
 {% block title %}Contact{% endblock %}
 
 {% block body %}
-    {{form_start(form)}}
-        {{form_row(form)}}
-        {{form_row(form)}}
-        <button class="btn btn-primary" type="submit">Envoyer</button>
-    {{form_end(form)}}
+    <h2 class="h1">Formulaire de contact</h2>
+    <hr>
+    {{ form_start(form) }}
+        {{ form_row(form.email, {'label': 'Votre adresse email'}) }}
+        {{ form_row(form.content, {'label': 'Votre message'}) }}
+        <button class="btn btn-primary" type="submit">Envoyer <i class="far fa-paper-plane"></i></button>
+    {{ form_end(form) }}
 {% endblock %}

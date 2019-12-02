@@ -16,25 +16,71 @@
     {% endfor %}
     {% for article in articles %}
         <article class="col-12 col-md-6 mt-4">
-            <h2 class="text-center">{{ article.title }}</h2>
+            <h2 class="text-center text-capitalize">{{ article.title }}</h2>
             <a href="{{ path('blog_edit', {'id': article.id}) }}" class="btn btn-link btn-sm text-warning"><i class="far fa-edit"></i> Modifier</a>
             <p class="m-0 small text-muted float-right">Ecrit le {{ article.createdAt | date('d/m/Y') }} à {{ article.createdAt | date('H:i') }}</p>
-            <div>
+            <div class="shadow mb-2">
                 <a href="{{ path('blog_show', {'id': article.id}) }}">
-                    <img src="{{ article.image }}" class="img-fluid" alt="Responsive image">
+                    <img src="{{ article.image }}" class="img-fluid shadow" alt="Responsive image">
                 </a>
             </div>
             <p class="text-justify">{{ article.content|truncate(180) }}</p>
-            <div class="row mb-1">
-                <div class="col-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="">
                     <a href="{{ path('blog_show', {'id': article.id}) }}" class="btn btn-success">En savoir plus</a>
+                    {% if app.user and article.isLikedByUser(app.user) %}
+                        <a href="{{ path('article_like', {'id': article.id}) }}" class="btn btn-link text-decoration-none js-like" style="color:#ff4757;">
+                            <i class="far fa-heart h4 m-0"></i>
+                            <span class="js-likes h4 m-0"> {{ article.likes|length }}</span>
+                        </a>
+                    {% else %}
+                        <a href="{{ path('article_like', {'id': article.id}) }}" class="btn btn-link text-decoration-none js-like" style="color:#ff4757;">
+                            <i class="far fa-heart h4 m-0"></i>
+                            <span class="js-likes h4 m-0"> {{ article.likes|length }}</span>
+                        </a>
+                    {% endif %}
                 </div>
-                <div class="col-5 offset-3">
-                    <a href="{{ path('cart_add', {'id': article.id}) }}" class="btn btn-primary btn-block">Acheter pour {{ article.price }}€</a>
+                <div class="">
+                    <a href="{{ path('cart_add', {'id': article.id}) }}" class="btn btn-primary">Acheter pour {{ article.price }}€</a>
                 </div>
             </div>
             
         </article>
     {% endfor %}
 </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function onClickLink(event) {
+            event.preventDefault();
+            const url = this.href;
+            const spanCount = this.querySelector('span.js-likes');
+            const icone = this.querySelector('i');
+
+            $.get(url, {},
+                function (data) {
+                    if (data.code == 200) {
+                        $(spanCount).html(data.like)
+                        if (icone.classList.contains('fas')) {
+                            icone.classList.replace('fas', 'far')
+                        } else {
+                            icone.classList.replace('far', 'fas')
+                        }
+                    } else if (data.code == 403) {
+                        alert(data.message);
+                    } else {
+                        alert("Une erreur s'est produite")
+                    }
+                },
+                "json"
+            );
+
+        }
+        var classes = document.getElementsByClassName('js-like');
+        //detect le click sur chaque bouton j'aime dans une boucle car on en a plusieurs
+        for (var i = 0; i < classes.length; i++) {
+            classes[i].addEventListener('click', onClickLink);
+        }
+    </script>
 {% endblock %}

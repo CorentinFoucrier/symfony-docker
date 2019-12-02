@@ -71,9 +71,15 @@ class Article
      */
     private $price;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ArticleLike", mappedBy="article")
+     */
+    private $likes;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,5 +188,46 @@ class Article
         $this->price = $price;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|ArticleLike[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(ArticleLike $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(ArticleLike $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            // set the owning side to null (unless already changed)
+            if ($like->getArticle() === $this) {
+                $like->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isLikedByUser(User $user)
+    {
+        foreach ($this->likes as $like) {
+            if ($like->getUsers() == $user) {
+                return true;
+            }
+        }
+        return false;
     }
 }

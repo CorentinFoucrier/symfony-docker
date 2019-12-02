@@ -3,33 +3,37 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-    <h2>{{ title }}</h2>
-    {{ form_start(form) }}
-        {{ form_row(form.title) }}
-        {{ form_row(form.content, {
-            'label': 'Contenu',
-            'attr': {'class': 'form-control', 'rows': '4'}
-        }) }}
-        {{ form_row(form.image) }}
-        {{form_row(form.category, {
-            'label' : 'Catégorie',
-            'attr' : {'class' : 'form-control'}
-        }) }}
-        <div class="form-group">
-                {{ form_label(form.price) }}
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">€</div>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <h2>{{ title }}</h2>
+            {{ form_start(form) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.content, {
+                    'label': 'Contenu',
+                    'attr': {'class': 'form-control', 'rows': '4'}
+                }) }}
+                {{ form_row(form.image) }}
+                {{form_row(form.category, {
+                    'label' : 'Catégorie',
+                    'attr' : {'class' : 'form-control'}
+                }) }}
+                <div class="form-group">
+                        {{ form_label(form.price) }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">€</div>
+                        </div>
+                        
+                        {{ form_errors(form.price) }}
+                        {{ form_widget(form.price) }}
+                    </div>
                 </div>
-                
-                {{ form_errors(form.price) }}
-                {{ form_widget(form.price) }}
-            </div>
+                {% if app.request.get('_route') == 'blog_edit' %}
+                    <button type="submit" class="btn btn-success">Editer</button>
+                {% else %}
+                    <button type="submit" class="btn btn-success">Sauvegarder</button>
+                {% endif %}
+            {{ form_end(form) }}
         </div>
-        {% if app.request.get('_route') == 'blog_edit' %}
-            <button type="submit" class="btn btn-success">Editer</button>
-        {% else %}
-            <button type="submit" class="btn btn-success">Sauvegarder</button>
-        {% endif %}
-    {{ form_end(form) }}
+    </div>
 {% endblock %}

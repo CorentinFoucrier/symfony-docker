@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\ArticleLike;
 use App\Entity\Comment;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Form\ContactFormType;
+use App\Repository\ArticleLikeRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,5 +133,49 @@ class BlogController extends AbstractController
         return $this->render('blog/contact.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/article/{id}/like", name="article_like")
+     */
+    public function like(Article $article, ObjectManager $manager, ArticleLikeRepository $likeRepo)
+    {
+        $user = $this->getUser();
+        // Si user n'est pas connecter
+        if (!$user) {
+            return $this->json([
+                'code' => 403,
+                'message' => 'Vous devez être connecté'
+            ], 200);
+        }
+        //
+        if ($article->isLikedByUser($user)) {
+            $like = $likeRepo->findOneBy([
+                'article' => $article,
+                'users' => $user
+            ]);
+            $manager->remove($like);
+            $manager->flush();
+
+            return $this->json([
+                'code' => 200,
+                'message' => 'Like bien supprimé !',
+                'like' => $likeRepo->count(['article' => $article])
+            ], 200);
+        }
+
+        $like = new ArticleLike();
+
+        $like
+            ->setArticle($article)
+            ->setUsers($user)
+        ;
+        $manager->persist($like);
+        $manager->flush();
+
+        return $this->json([
+            'code' => 200,
+            'like' => $likeRepo->count(['article' => $article])
+        ], 200);
     }
 }

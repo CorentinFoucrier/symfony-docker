@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -70,6 +72,16 @@ class User implements UserInterface
      */
     private $confirm_password;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ArticleLike", mappedBy="users")
+     */
+    private $likes;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+    }
+
     public function getId() : ?int
     {
         return $this->id;
@@ -130,4 +142,35 @@ class User implements UserInterface
     public function getSalt() {}
 
     public function eraseCredentials() {}
+
+    /**
+     * @return Collection|ArticleLike[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(ArticleLike $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(ArticleLike $like): self
+    {
+        if ($this->likes->contains($like)) {
+            $this->likes->removeElement($like);
+            // set the owning side to null (unless already changed)
+            if ($like->getUsers() === $this) {
+                $like->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
 }

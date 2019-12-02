@@ -10,6 +10,8 @@ services:
       - ./www:/var/www
     env_file:
       - .env
+    depends_on:
+      - symfony-docker.mysql
     environment:
       VIRTUAL_HOST: symfony.localhost
 
