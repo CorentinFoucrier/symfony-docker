@@ -51,7 +51,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(
-     *      min = 5,
+     *      min = 12,
      *      max = 255,
      *      minMessage = "Minimum {{ limit }} caractères !",
      *      maxMessage = "Maximum {{ limit }} caractères !"
