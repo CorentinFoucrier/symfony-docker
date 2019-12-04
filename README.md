@@ -1,3 +1,3 @@
 # symfony-docker
 
-Training on symfony 4.3
+Training on symfony 5.0

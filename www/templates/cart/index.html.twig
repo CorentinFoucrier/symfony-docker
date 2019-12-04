@@ -16,7 +16,7 @@
             {% for item in items %}
                 <tr>
                     <td>{{item.article.title}}</td>
-                    <td>{{item.article.content|truncate(80)}}</td>
+                    <td>{{item.article.content|textTruncate()}}</td>
                     <td>{{item.qty}}</td>
                     <td>{{item.article.price * item.qty}}€</td>
                     <td><a class="text-danger" href="{{ path('cart_delete', {'id': item.article.id}) }}"><i class="far fa-trash-alt"></i></a></td>

@@ -24,7 +24,7 @@
                     <img src="{{ article.image }}" class="img-fluid shadow" alt="Responsive image">
                 </a>
             </div>
-            <p class="text-justify">{{ article.content|truncate(180) }}</p>
+            <p class="text-justify">{{ article.content|textTruncate() }}</p>
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <div class="">
                     <a href="{{ path('blog_show', {'id': article.id}) }}" class="btn btn-success">En savoir plus</a>
